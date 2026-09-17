@@ -15,7 +15,8 @@ Implementação de um [desafio técnico encontrado no r/brdev](https://www.reddi
 
 - Java 21 + Spring Boot 4
 - Spring Data JPA / Hibernate
-- H2 em memória (padrão) ou MySQL via Docker Compose
+- MySQL (persistência real — pautas e votos sobrevivem a restart da aplicação)
+- H2 em memória apenas nos testes automatizados
 - Bean Validation
 - springdoc-openapi (Swagger UI)
 - Lombok
@@ -23,10 +24,11 @@ Implementação de um [desafio técnico encontrado no r/brdev](https://www.reddi
 ## Como rodar
 
 ```bash
+docker compose up -d
 ./mvnw spring-boot:run
 ```
 
-Por padrão usa H2 em memória, sem necessidade de configuração. Para rodar com MySQL, suba o banco com `docker compose up -d` e ajuste `spring.datasource.*` em `application.properties`.
+O `docker compose up -d` sobe um MySQL local (dados persistidos em volume Docker). A aplicação já vem configurada com as mesmas credenciais do `compose.yaml`. Para rodar contra outro banco (produção/cloud), sobrescreva via variáveis de ambiente: `DB_URL`, `DB_USERNAME`, `DB_PASSWORD`, `PORT`.
 
 A API sobe em `http://localhost:8080`. Documentação interativa (Swagger UI) em `http://localhost:8080/swagger-ui/index.html`.
 
@@ -43,3 +45,13 @@ A API sobe em `http://localhost:8080`. Documentação interativa (Swagger UI) em
 | GET | `/pautas/{pautaId}/votos/resultado` | Apura o resultado da votação |
 
 Erros de negócio (sessão encerrada, voto duplicado, recurso não encontrado, validação) retornam JSON padronizado com `status` e `mensagem`, tratados centralmente por um `@RestControllerAdvice`.
+
+## Status em relação ao desafio
+
+- [x] Cadastrar pauta
+- [x] Abrir sessão de votação com prazo (default 1 minuto)
+- [x] Voto único por associado por pauta (SIM/NÃO)
+- [x] Contabilizar votos e apurar resultado
+- [x] Persistir pautas e votos sem perder no restart
+- [ ] Rodar na nuvem
+- [ ] Bônus: integração com `user-info.herokuapp.com` para validar se o associado pode votar pelo CPF
