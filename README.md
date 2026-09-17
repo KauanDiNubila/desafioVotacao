@@ -43,9 +43,3 @@ A API sobe em `http://localhost:8080`. Documentação interativa (Swagger UI) em
 | GET | `/pautas/{pautaId}/votos/resultado` | Apura o resultado da votação |
 
 Erros de negócio (sessão encerrada, voto duplicado, recurso não encontrado, validação) retornam JSON padronizado com `status` e `mensagem`, tratados centralmente por um `@RestControllerAdvice`.
-
-## Possíveis evoluções
-
-- Cobertura de testes (unitários dos services e de integração dos endpoints)
-- Autenticação/autorização por associado
-- Notificação assíncrona ao encerrar a sessão
